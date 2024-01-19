@@ -1,5 +1,6 @@
-import { Link as ChakraLink, Box, Flex, Button } from '@chakra-ui/react';
+import { Link as ChakraLink, Box, Flex,Text, Button } from '@chakra-ui/react';
 import { FaGithub } from 'react-icons/fa';
+import Typewriter from 'typewriter-effect';
 
 const Header = () => {
   return (
@@ -15,18 +16,19 @@ const Header = () => {
           pl={[0, 4]}
           align="center"
           justify="space-between">
-          {/* Removed the Logo component */}
+          
           <Flex align="center">
             <ChakraLink href="/score">
-              <Button size="sm" mr={3}>Score Board</Button>
+              <Button size="sm" mr={3}>Results</Button>
             </ChakraLink>
 
             <ChakraLink
               isExternal
-              href="https://github.com/Aniruth19">
+              href="https://github.com/Aniruth19/Miss-C-24">
               <Box as={FaGithub} size="25px" />
             </ChakraLink>
           </Flex>
+
         </Flex>
       </Box>
     </Box>
