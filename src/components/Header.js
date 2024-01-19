@@ -2,6 +2,7 @@ import { Link as ChakraLink, Box, Flex,Text, Button } from '@chakra-ui/react';
 import { FaGithub } from 'react-icons/fa';
 import Typewriter from 'typewriter-effect';
 
+
 const Header = () => {
   return (
     <Box
@@ -18,7 +19,7 @@ const Header = () => {
           justify="space-between">
           
           <Flex align="center">
-            <ChakraLink href="/score">
+            <ChakraLink href="/Result">
               <Button size="sm" mr={3}>Results</Button>
             </ChakraLink>
 

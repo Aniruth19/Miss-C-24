@@ -12,45 +12,56 @@ import {
   AlertTitle,
   AlertDescription,
 } from '@chakra-ui/react';
+import Confetti from 'react-dom-confetti';
 import { auth } from './ConfigFirebase';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import Confetti from 'react-dom-confetti';
 
 const questions = [
   {
     id: 1,
-    question: '/images/question1.jpg',
+    question: 'q1.png',
     options: [
-      '/images/answer1_1.jpg',
-      '/images/answer1_2.jpg',
-      '/images/answer1_3.jpg',
-      '/images/answer1_4.jpg',
+      'q1opt1.png',
+      'q1opt2.png',
+      'q1opt3.png',
+      'q1opt4.png',
     ],
-    correctAnswer: '/images/answer1_3.jpg',
+    correctAnswer: 'q1opt1.png',
   },
   {
     id: 2,
-    question: '/images/question2.jpg',
+    question: 'q2.png',
     options: [
-      '/images/answer2_1.jpg',
-      '/images/answer2_2.jpg',
-      '/images/answer2_3.jpg',
-      '/images/answer2_4.jpg',
+      'q1opt1.png',
+      'q1opt2.png',
+      'q1opt3.png',
+      'q1opt4.png',
     ],
-    correctAnswer: '/images/answer2_2.jpg',
+    correctAnswer: 'q1opt3.png',
   },
-  // Add more questions as needed
+  {
+    id: 3,
+    question: 'q2.png',
+    options: [
+      'q1opt1.png',
+      'q1opt2.png',
+      'q1opt3.png',
+      'q1opt4.png',
+    ],
+    correctAnswer: 'q1opt1.png',
+  },
+  
 ];
 
 const Quiz = () => {
   const navigate = useNavigate();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState({});
-  const [showAlert, setShowAlert] = useState(false);
-  const [confetti, setConfetti] = useState(false);
   const [score, setScore] = useState(0);
   const [user, setUser] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
+  const [confetti, setConfetti] = useState(false);
 
   const handleAnswerChange = (value) => {
     setSelectedOptions((prevSelectedOptions) => ({
@@ -77,19 +88,12 @@ const Quiz = () => {
     });
 
     setScore(newScore);
+    setShowAlert(true);
+    setConfetti(true);
 
     setTimeout(() => {
-      setConfetti(true);
-      setShowAlert(true);
-
-      // Navigate to the "Result" page
       navigate('/Result');
-    }, 500);
-  };
-
-  const confettiConfig = {
-    spread: 180,
-    elementCount: 100,
+    }, 800);
   };
 
   const logout = () => {
@@ -113,6 +117,11 @@ const Quiz = () => {
     return () => unsubscribe();
   }, [navigate]);
 
+  const confettiConfig = {
+    spread: 180,
+    elementCount: 100,
+  };
+
   return (
     <Box p={4}>
       <Card borderRadius="lg">
@@ -121,9 +130,13 @@ const Quiz = () => {
             Question {currentQuestionIndex + 1} of {questions.length}
           </Text>
 
-          <Box mb={4}>
-            {/* Use a fixed height for question images */}
-            <img src={questions[currentQuestionIndex].question} alt={`Question ${currentQuestionIndex + 1}`} style={{ maxWidth: '100%', height: '200px', objectFit: 'cover' }} />
+          <Box mb={4} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
+            {/* Center the question image */}
+            <img
+              src={questions[currentQuestionIndex].question}
+              alt={`Question ${currentQuestionIndex + 1}`}
+              style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+            />
           </Box>
 
           <RadioGroup onChange={handleAnswerChange} value={selectedOptions[currentQuestionIndex] || ''}>
@@ -131,7 +144,11 @@ const Quiz = () => {
               {questions[currentQuestionIndex].options.map((option, index) => (
                 <Radio key={index} value={option}>
                   {/* Use a fixed height for answer images */}
-                  <img src={option} alt={`Option ${index + 1}`} style={{ maxWidth: '100%', height: '100px', objectFit: 'cover' }} />
+                  <img
+                    src={option}
+                    alt={`Option ${index + 1}`}
+                    style={{ maxWidth: '100%', height: 'auto', maxHeight: '100px', width: 'auto', objectFit: 'contain' }}
+                  />
                 </Radio>
               ))}
             </Stack>
@@ -171,3 +188,4 @@ const Quiz = () => {
 };
 
 export default Quiz;
+
