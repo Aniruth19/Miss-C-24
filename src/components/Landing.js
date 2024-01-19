@@ -48,7 +48,7 @@ const Landing = () => {
           loop: true,
         }}
       />
-
+       
       <Button mt="8" onClick={login}>
         GET STARTED
       </Button> 

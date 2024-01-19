@@ -16,6 +16,8 @@ import Confetti from 'react-dom-confetti';
 import { auth } from './ConfigFirebase';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { database } from './ConfigFirebase';
+import { collection, addDoc } from 'firebase/firestore';
 
 const questions = [
   {
@@ -51,7 +53,6 @@ const questions = [
     ],
     correctAnswer: 'q1opt1.png',
   },
-  
 ];
 
 const Quiz = () => {
@@ -78,7 +79,7 @@ const Quiz = () => {
     setCurrentQuestionIndex((prevIndex) => Math.max(prevIndex - 1, 0));
   };
 
-  const handleFinishQuiz = () => {
+  const handleFinishQuiz = async () => {
     let newScore = 0;
 
     questions.forEach((question, index) => {
@@ -90,6 +91,13 @@ const Quiz = () => {
     setScore(newScore);
     setShowAlert(true);
     setConfetti(true);
+
+    // Add user email and score to Firestore
+    const scoresCollection = collection(database, 'userscores');
+    await addDoc(scoresCollection, {
+      name: user,
+      score: newScore,
+    });
 
     setTimeout(() => {
       navigate('/Result');
@@ -105,6 +113,7 @@ const Quiz = () => {
         console.log(err);
       });
   };
+  
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((userData) => {
@@ -188,4 +197,3 @@ const Quiz = () => {
 };
 
 export default Quiz;
-
