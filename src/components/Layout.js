@@ -1,4 +1,4 @@
-import { Stack, Flex, useColorMode } from '@chakra-ui/react'; // Adjust the import for useColorMode
+import { Stack, Flex, useColorMode } from '@chakra-ui/react';
 import Header from './Header';
 
 

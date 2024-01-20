@@ -28,6 +28,8 @@ const Landing = () => {
     });
   }, []);
 
+  
+
   return (
     <Box
       display="flex"

@@ -18,43 +18,7 @@ import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { database } from './ConfigFirebase';
 import { collection, addDoc } from 'firebase/firestore';
-
-const questions = [
-  {
-    id: 1,
-    question: 'q1.png',
-    options: [
-      'q1opt1.png',
-      'q1opt2.png',
-      'q1opt3.png',
-      'q1opt4.png',
-    ],
-    correctAnswer: 'q1opt1.png',
-  },
-  {
-    id: 2,
-    question: 'q2.png',
-    options: [
-      'q1opt1.png',
-      'q1opt2.png',
-      'q1opt3.png',
-      'q1opt4.png',
-    ],
-    correctAnswer: 'q1opt3.png',
-  },
-  {
-    id: 3,
-    question: 'q2.png',
-    options: [
-      'q1opt1.png',
-      'q1opt2.png',
-      'q1opt3.png',
-      'q1opt4.png',
-    ],
-    correctAnswer: 'q1opt1.png',
-  },
-];
-
+import questions from './Questions';
 const Quiz = () => {
   const navigate = useNavigate();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -81,28 +45,33 @@ const Quiz = () => {
 
   const handleFinishQuiz = async () => {
     let newScore = 0;
-
+  
     questions.forEach((question, index) => {
       if (selectedOptions[index] === question.correctAnswer) {
         newScore += 1;
       }
     });
-
+  
     setScore(newScore);
     setShowAlert(true);
     setConfetti(true);
+  
+    const currentTime = new Date();
+    const timeOfSubmission = currentTime.toLocaleTimeString('en-US', { hour12: true });
 
-    // Add user email and score to Firestore
+  
     const scoresCollection = collection(database, 'userscores');
     await addDoc(scoresCollection, {
       name: user,
       score: newScore,
+      timeofsub: timeOfSubmission,
     });
-
+  
     setTimeout(() => {
       navigate('/Result');
     }, 800);
   };
+  
 
   const logout = () => {
     signOut(auth)
@@ -114,7 +83,6 @@ const Quiz = () => {
       });
   };
   
-
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((userData) => {
       if (!userData?.email) {
@@ -122,7 +90,6 @@ const Quiz = () => {
       }
       setUser(userData?.email || '');
     });
-
     return () => unsubscribe();
   }, [navigate]);
 
@@ -130,7 +97,6 @@ const Quiz = () => {
     spread: 180,
     elementCount: 100,
   };
-
   return (
     <Box p={4}>
       <Card borderRadius="lg">
@@ -138,21 +104,18 @@ const Quiz = () => {
           <Text fontSize="md" color="gray.500" mb={4}>
             Question {currentQuestionIndex + 1} of {questions.length}
           </Text>
-
           <Box mb={4} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
-            {/* Center the question image */}
+
             <img
               src={questions[currentQuestionIndex].question}
               alt={`Question ${currentQuestionIndex + 1}`}
               style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
             />
           </Box>
-
           <RadioGroup onChange={handleAnswerChange} value={selectedOptions[currentQuestionIndex] || ''}>
             <Stack spacing={2}>
               {questions[currentQuestionIndex].options.map((option, index) => (
                 <Radio key={index} value={option}>
-                  {/* Use a fixed height for answer images */}
                   <img
                     src={option}
                     alt={`Option ${index + 1}`}
@@ -188,11 +151,11 @@ const Quiz = () => {
 
       <Confetti active={confetti} config={confettiConfig} />
 
-      {/* Display the currently logged-in user */}
       <Text mt={4} textAlign="center">
         Currently logged in as: {user}
       </Text>
     </Box>
+
   );
 };
 

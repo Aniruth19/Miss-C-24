@@ -16,7 +16,6 @@ const Header = () => {
           </ChakraLink>
         </Flex>
 
-        {/* Logo in the center */}
         <Image src="/logo.png" alt="Logo" boxSize="85px" />
 
       </Flex>

@@ -1,13 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Thead, Tbody, Tr, Th, Td, Box, Alert, AlertIcon, AlertTitle, AlertDescription, Button, Badge, Text, Flex, Heading } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  Badge,
+  Text,
+  Flex,
+  Heading,
+} from '@chakra-ui/react';
 import { motion, useAnimation } from 'framer-motion';
-import { GiTrophyCup } from 'react-icons/gi'; // Import trophy icon
-import { FaCrown } from 'react-icons/fa'; // Import crown icon
+import { GiTrophyCup } from 'react-icons/gi';
+import { FaCrown } from 'react-icons/fa';
 import { auth } from './ConfigFirebase';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { database } from './ConfigFirebase';
 import { collection, getDocs } from 'firebase/firestore';
+import { database } from './ConfigFirebase';
 
 const Result = () => {
   const navigate = useNavigate();
@@ -15,17 +31,18 @@ const Result = () => {
   const [userScores, setUserScores] = useState([]);
   const controls = useAnimation();
 
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((userData) => {
       if (!userData?.email) {
         setShowAlert(true);
         setTimeout(() => {
           navigate('/');
-        }, 3000);
+        }, 2000);
       }
     });
 
-    // Fetch user scores from Firestore
+
     const fetchData = async () => {
       const scoresCollection = collection(database, 'userscores');
       const scoresSnapshot = await getDocs(scoresCollection);
@@ -35,14 +52,12 @@ const Result = () => {
 
     fetchData();
 
-    // Animate the component on mount
     controls.start({ opacity: 1, y: 0 });
 
     return () => unsubscribe();
   }, [navigate, controls]);
 
   const logout = () => {
-    // Animate the component on logout
     controls.start({ opacity: 0, y: -20 });
 
     signOut(auth)
@@ -56,7 +71,6 @@ const Result = () => {
       });
   };
 
-  // Sort the userScores in descending order based on the score
   const sortedScores = [...userScores].sort((a, b) => b.score - a.score);
 
   return (
@@ -66,93 +80,97 @@ const Result = () => {
           <Alert status="warning" variant="solid" display={showAlert ? 'flex' : 'none'}>
             <AlertIcon />
             <AlertTitle mr={2}>Unauthorized Access</AlertTitle>
-            <AlertDescription>Please log in to access this page.</AlertDescription>
+            <Text>Please log in and complete the Quiz to access this page.</Text>
           </Alert>
         </motion.div>
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.2 }}>
-          {/* Trophy and Leaderboard heading */}
-          <Flex alignItems="center" mb={4} justifyContent="center">
+          <Flex alignItems="center" mb={4} justifyContent="center" pt={4} pb={4}>
             <GiTrophyCup size={32} style={{ marginRight: '8px' }} />
             <Heading size="lg" fontWeight="bold">
               Leaderboard
             </Heading>
           </Flex>
-
-          {/* Note about Resubmissions with custom CSS animation */}
-          
-          <style>
-            {`
-              @keyframes fadeInUp {
-                from {
-                  opacity: 0;
-                  transform: translateY(20px);
-                }
-                to {
-                  opacity: 1;
-                  transform: translateY(0);
-                }
-              }
-              .resubmission-note {
-                animation: fadeInUp 0.5s ease-in-out;
-              }
-            `}
-          </style>
-
-          {/* Table with scores */}
           <Table variant="striped" colorScheme="gray" size="md">
-  <Thead>
-    <Tr>
-      <Th>Rank</Th>
-      <Th>User</Th>
-      <Th>Score</Th>
-    </Tr>
-  </Thead>
-  <Tbody>
-    {sortedScores.map((userScore, index) => (
-      <Tr key={index}>
-        <Td>
-          {index === 0 ? (
-            <Box as={FaCrown} color="gold" size="20px" mr={2} />
-          ) : index === 1 ? (
-            <Box as={FaCrown} color="silver" size="20px" mr={2} />
-          ) : index === 2 ? (
-            <Box as={FaCrown} color="bronze" size="20px" mr={2} />
-          ) : (
-            index + 1
-          )}
-        </Td>
-        <Td>{userScore.name}</Td>
-        <Td>
-          <Badge
-            colorScheme="white"  // Set a single color for the background
-            color="black.500"  // Set the text color
-          >
-            {userScore.score}
-          </Badge>
-        </Td>
-      </Tr>
-    ))}
-  </Tbody>
-</Table>
+            <Thead>
+              <Tr>
+                <Th>Rank</Th>
+                <Th>User</Th>
+                <Th>Score</Th>
+                <Th>Time of Submission</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {sortedScores.map((userScore, index) => (
+                <Tr key={index}>
+                  <Td>
+                    {index === 0 ? (
+                      <Box as={FaCrown} color="gold" size="20px" mr={2} />
+                    ) : index === 1 ? (
+                      <Box as={FaCrown} color="silver" size="20px" mr={2} />
+                    ) : index === 2 ? (
+                      <Box as={FaCrown} color="bronze" size="20px" mr={2} />
+                    ) : (
+                      index + 1
+                    )}
+                  </Td>
+                  <Td>{userScore.name}</Td>
+                  <Td>
+                    <Badge colorScheme="white" color="black.900">
+                      {userScore.score}
+                    </Badge>
+                  </Td>
+                  <Td>{userScore.timeofsub}</Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
         </motion.div>
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9, delay: 0.5 }}>
-          {/* Logout button */}
           <Flex justifyContent="center" my={4}>
-            <Button colorScheme="gray" onClick={logout}>
+            <Button colorScheme="red" onClick={logout}>
               Logout
             </Button>
           </Flex>
         </motion.div>
-        <Text
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.7 }}
+        >
+          <Text
             fontSize="sm"
             color="red.500"
             fontWeight="bold"
+            fontStyle="italic"
             mb={4}
             textAlign="center"
             className="resubmission-note"
           >
-            Note: Resubmissions will not be taken into account.
+            <span style={{ fontStyle: 'normal', color: 'black' }}>Note:</span> Resubmissions will not be taken into account.
           </Text>
+        
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <img
+              src="/creator.gif" 
+              alt="Creator GIF"
+              style={{ 
+                maxWidth: '50%', 
+                maxHeight: '50%', 
+                marginTop: '220px',
+                opacity: 0.8,
+                borderRadius: '20px'
+              }}
+            />
+          </div>
+          <Text
+            fontSize="sm"
+            fontStyle="italic"
+            color="gray.500"
+            textAlign="center"
+            mt={4}
+          >Created by <motion.span animate={{ fontStyle: 'normal', color: '#E53E3E' }}>Aniruth</motion.span>
+          </Text>
+        </motion.div>
       </Box>
     </motion.div>
   );
