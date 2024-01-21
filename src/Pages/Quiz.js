@@ -13,12 +13,12 @@ import {
   AlertDescription,
 } from '@chakra-ui/react';
 import Confetti from 'react-dom-confetti';
-import { auth } from './ConfigFirebase';
+import { auth } from '../components/ConfigFirebase';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { database } from './ConfigFirebase';
+import { database } from '../components/ConfigFirebase';
 import { collection, addDoc } from 'firebase/firestore';
-import questions from './Questions';
+import questions from '../components/Questions';
 const Quiz = () => {
   const navigate = useNavigate();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -94,8 +94,8 @@ const Quiz = () => {
   }, [navigate]);
 
   const confettiConfig = {
-    spread: 180,
-    elementCount: 100,
+    spread: 200,
+    elementCount: 200,
   };
   return (
     <Box p={4}>
@@ -105,7 +105,6 @@ const Quiz = () => {
             Question {currentQuestionIndex + 1} of {questions.length}
           </Text>
           <Box mb={4} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
-
             <img
               src={questions[currentQuestionIndex].question}
               alt={`Question ${currentQuestionIndex + 1}`}
@@ -132,8 +131,7 @@ const Quiz = () => {
             <Button
               onClick={currentQuestionIndex === questions.length - 1 ? handleFinishQuiz : handleNextQuestion}
               disabled={!selectedOptions[currentQuestionIndex]}
-              colorScheme={currentQuestionIndex === questions.length - 1 ? 'green' : 'gray'}
-            >
+              colorScheme={currentQuestionIndex === questions.length - 1 ? 'green' : 'gray'}>
               {currentQuestionIndex === questions.length - 1 ? 'Finish Quiz' : 'Next Question'}
             </Button>
             <Button colorScheme="red" onClick={logout}>
@@ -142,21 +140,16 @@ const Quiz = () => {
           </Stack>
         </Stack>
       </Card>
-
       <Alert status="success" variant="solid" display={showAlert ? 'flex' : 'none'}>
         <AlertIcon />
         <AlertTitle mr={2}>Quiz Completed!</AlertTitle>
         <AlertDescription>Your score is: {score}</AlertDescription>
       </Alert>
-
       <Confetti active={confetti} config={confettiConfig} />
-
       <Text mt={4} textAlign="center">
         Currently logged in as: {user}
       </Text>
     </Box>
-
   );
 };
-
 export default Quiz;

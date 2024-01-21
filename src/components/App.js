@@ -1,14 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { ChakraProvider } from '@chakra-ui/react';
-import Landing from './Landing';
-import Quiz from './Quiz';
+import Landing from '../Pages/Landing';
+import Quiz from '../Pages/Quiz';
 import Layout from './Layout';
-import Result from './Result';
-
+import Result from '../Pages/Result';
 function App() {
-  return (
-    <ChakraProvider>
+  return (  
       <div>
         <Router>
           <Routes>
@@ -18,8 +15,6 @@ function App() {
           </Routes>
         </Router>
       </div>
-    </ChakraProvider>
   );
 }
-
 export default App;

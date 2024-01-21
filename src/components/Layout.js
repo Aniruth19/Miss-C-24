@@ -26,7 +26,6 @@ const Layout = ({ children }) => {
           spacing={8}>
           {children}
         </Stack>
-
       </Flex>
     </>
   );
