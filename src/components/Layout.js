@@ -1,11 +1,12 @@
 import { Stack, Flex, useColorMode } from '@chakra-ui/react';
 import Header from './Header';
+import { Player, Controls } from '@lottiefiles/react-lottie-player';
 
 
 const Layout = ({ children }) => {
   const { colorMode } = useColorMode();
-  const bgColor = { light: 'gray.50', dark: 'gray.900' };
-  const color = { light: 'gray.900', dark: 'gray.50' };
+  const bgColor = { light: 'gray.50'};
+  const color = { light: 'gray.900'};
 
   return (
     <>
@@ -22,7 +23,7 @@ const Layout = ({ children }) => {
           justify="center"
           align="center"
           flexGrow={1}
-          width={['100%', 'xl', 'xl', 'xl']}
+          width={['100%', 'xl', 'xl', '3xl']}
           spacing={8}>
           {children}
         </Stack>

@@ -9,7 +9,7 @@ const Header = () => {
             <Button size="sm" mr={3}>Results</Button>
           </ChakraLink>
           <ChakraLink isExternal href="https://github.com/Aniruth19/Miss-C-24">
-          <Box as={FaGithub} size="25px" />
+          <Box as={FaGithub} size="30px" />
           </ChakraLink>
         </Flex>
         <Image src="/logo.png" alt="Logo" boxSize="95px" />

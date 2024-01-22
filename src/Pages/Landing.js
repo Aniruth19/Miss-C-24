@@ -4,9 +4,9 @@ import { auth, provider } from '../components/ConfigFirebase';
 import { Heading, Button, Box } from '@chakra-ui/react';
 import Typewriter from 'typewriter-effect';
 import { useNavigate } from 'react-router-dom';
+import { Player, Controls } from '@lottiefiles/react-lottie-player';
 
 const Landing = () => {
-
   const navigate = useNavigate();
 
   const login = () => {
@@ -28,7 +28,7 @@ const Landing = () => {
       }
     });
   }, [navigate]);
-  
+
   return (
     <Box
       display="flex"
@@ -38,23 +38,32 @@ const Landing = () => {
       h="100vh"
       textAlign="center"
     >
-      <Heading as="h1" size="xl" fontWeight="black" mb="6">
-    CAN YOU FIND THE MIS_SING C_DE?
-      </Heading>
+      <Player
+        autoplay
+        loop
+        src="/search.json"
+        style={{ height: '220px', width: '400px', overflow: 'hidden', zIndex: 1, margin: 0, padding: 0 }}
+      >
+        <Controls visible={false} buttons={['play', 'repeat', 'frame', 'debug']} />
+      </Player>
 
+      <Heading as="h1" size="xl" fontWeight="black" mb="6">
+        CAN YOU FIND THE MIS_SING C_DE?
+      </Heading>
       <div style={{ fontSize: '24px' }}>
-  <Typewriter
-    options={{
-      strings: ['30 questions', '30 minutes', 'Can you figure it out?'],
-      autoStart: true,
-      loop: true,
-    }}
-  />
-</div>    
+        <Typewriter
+          options={{
+            strings: ['20 questions', '30 minutes', 'Can you find the missing block?'],
+            autoStart: true,
+            loop: true,
+          }}
+        />
+      </div>
       <Button mt="8" onClick={login}>
         GET STARTED
-      </Button> 
+      </Button>
     </Box>
   );
 };
+
 export default Landing;
