@@ -14,15 +14,20 @@ import {
   Collapse,
   Image,
   VStack,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
 } from '@chakra-ui/react';
 import Confetti from 'react-dom-confetti';
 import { auth } from '../components/ConfigFirebase';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { database } from '../components/ConfigFirebase';
 import { collection, addDoc } from 'firebase/firestore';
 import questions from '../components/Questions';
-
+import { database } from '../components/ConfigFirebase';
 const Quiz = () => {
   const navigate = useNavigate();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -32,6 +37,8 @@ const Quiz = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [confetti, setConfetti] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const [logoutConfirmation, setLogoutConfirmation] = useState(false);
+  const cancelRef = React.useRef();
 
   const handleAnswerChange = (value) => {
     setSelectedOptions((prevSelectedOptions) => ({
@@ -42,12 +49,13 @@ const Quiz = () => {
 
   const handleNextQuestion = () => {
     setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
-    setShowHint(false); // Reset hint visibility for the next question
+    setShowHint(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handlePreviousQuestion = () => {
     setCurrentQuestionIndex((prevIndex) => Math.max(prevIndex - 1, 0));
-    setShowHint(false); // Reset hint visibility for the previous question
+    setShowHint(false);
   };
 
   const handleFinishQuiz = async () => {
@@ -78,7 +86,12 @@ const Quiz = () => {
     }, 800);
   };
 
+  const handleLogout = () => {
+    setLogoutConfirmation(true);
+  };
+
   const logout = () => {
+    setLogoutConfirmation(false);
     signOut(auth)
       .then(() => {
         navigate('/');
@@ -116,8 +129,8 @@ const Quiz = () => {
               alt={`Question ${currentQuestionIndex + 1}`}
               style={{ width: '100%', height: '100%', objectFit: 'contain' }}
             />
-            <Text mb={1}>{questions[currentQuestionIndex].input}</Text>
-            <Text mb={1}>{questions[currentQuestionIndex].output}</Text>
+            <Text mb={1}><strong>INPUT : </strong>{questions[currentQuestionIndex].input}</Text>
+            <Text mb={1}><strong>OUTPUT : </strong>{questions[currentQuestionIndex].output}</Text>
           </VStack>
           <Collapse in={showHint} unmountOnExit>
             <Text fontSize="sm" color="black.500" mb={2}>
@@ -161,7 +174,7 @@ const Quiz = () => {
             >
               {currentQuestionIndex === questions.length - 1 ? 'Finish Quiz' : 'Next Question'}
             </Button>
-            <Button colorScheme="red" onClick={logout} ml={6}>
+            <Button colorScheme="red" onClick={handleLogout} ml={6}>
               Logout
             </Button>
           </Stack>
@@ -176,6 +189,31 @@ const Quiz = () => {
       <Text mt={4} textAlign="center">
         Currently logged in as: {user}
       </Text>
+
+      <AlertDialog
+        isOpen={logoutConfirmation}
+        leastDestructiveRef={cancelRef}
+        onClose={() => setLogoutConfirmation(false)}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Logout Confirmation
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              Are you sure you want to logout? your progress will be lost.
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={() => setLogoutConfirmation(false)}>
+                Cancel
+              </Button>
+              <Button colorScheme="red" onClick={logout} ml={3}>
+                Logout
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </Box>
   );
 };

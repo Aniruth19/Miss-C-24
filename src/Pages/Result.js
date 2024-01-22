@@ -8,14 +8,18 @@ import {
   Tr,
   Th,
   Td,
-  Alert,
-  AlertIcon,
-  AlertTitle,
   Badge,
-  Text,
   Flex,
   Heading,
   Link as ChakraLink,
+  Text,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogBody,
+  AlertDialogFooter,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { GiTrophyCup } from 'react-icons/gi';
 import { FaCrown } from 'react-icons/fa';
@@ -24,18 +28,19 @@ import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs } from 'firebase/firestore';
 import { database } from '../components/ConfigFirebase';
+
 const Result = () => {
   const navigate = useNavigate();
-  const [showAlert, setShowAlert] = useState(false);
   const [userScores, setUserScores] = useState([]);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((userData) => {
       if (!userData?.email) {
-        setShowAlert(true);
+        onOpen();
         setTimeout(() => {
           navigate('/');
-        }, 2000);
+        }, 400);
       }
     });
 
@@ -48,7 +53,7 @@ const Result = () => {
     fetchData();
 
     return () => unsubscribe();
-  }, [navigate]);
+  }, [navigate, onOpen]);
 
   const logout = () => {
     signOut(auth)
@@ -61,13 +66,46 @@ const Result = () => {
   };
 
   const sortedScores = [...userScores].sort((a, b) => b.score - a.score);
+
   return (
     <Box p={4} overflowX="auto">
-      <Alert status="warning" variant="solid" display={showAlert ? 'flex' : 'none'}>
-        <AlertIcon />
-        <AlertTitle mr={2}>Unauthorized Access</AlertTitle>
-        <Text>Please log in and complete the Quiz to access this page.</Text>
-      </Alert>
+      <AlertDialog isOpen={isOpen} leastDestructiveRef={undefined} onClose={onClose}>
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Unauthorized Access
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              Please log in and complete the Quiz to access this page.
+            </AlertDialogBody>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+
+      <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={undefined}
+        onClose={onClose}
+        isCentered
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Logout Confirmation
+            </AlertDialogHeader>
+            <AlertDialogBody>
+              Are you sure you want to logout? Your progress will be lost.
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button onClick={onClose}>Cancel</Button>
+              <Button colorScheme="red" onClick={logout} ml={3}>
+                Logout
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
+
       <Flex alignItems="center" mb={4} justifyContent="center" pt={4} pb={4}>
         <GiTrophyCup size={32} style={{ marginRight: '8px' }} />
         <Heading size="lg" fontWeight="bold">
@@ -75,50 +113,46 @@ const Result = () => {
         </Heading>
       </Flex>
       <Table variant="simple" colorScheme="gray" size="md">
-  <Thead>
-    <Tr>
-      <Th>Rank</Th>
-      <Th textAlign="center">User</Th> 
-      <Th textAlign="center">Score</Th> 
-      <Th width="200px" textAlign="center">Time of Submission</Th> 
-    </Tr>
-  </Thead>
-  <Tbody>
-    {sortedScores.map((userScore, index) => (
-      <Tr key={index} _hover={{ bg: 'yellow.200', transition: 'background-color 0.3s ease-in-out' }}>
-        <Td>
-          {index === 0 ? (
-            <Box as={FaCrown} color="gold" size="20px" mr={2} />
-          ) : index === 1 ? (
-            <Box as={FaCrown} color="silver" size="20px" mr={2} />
-          ) : index === 2 ? (
-            <Box
-              as={FaCrown}
-              size="20px"
-              mr={2}
-              style={{ color: '#cd7f32' }} 
-            />
-          ) : (
-            index + 1
-          )}
-        </Td>
-        <Td>{userScore.name}</Td>
-        <Td textAlign="center"> {/* Centering the content in the "Score" column */}
-          <Badge colorScheme="white" color="black.900">
-            {userScore.score}
-          </Badge>
-        </Td>
-        <Td style={{ fontSize: '14px' }} textAlign="center"> {/* Centering the content in the "Time of Submission" column */}
-          {userScore.timeofsub}
-        </Td>
-      </Tr>
-    ))}
-  </Tbody>
-</Table>
-
+        <Thead>
+          <Tr>
+            <Th>Rank</Th>
+            <Th textAlign="center">User</Th>
+            <Th textAlign="center">Score</Th>
+            <Th width="200px" textAlign="center">
+              Time of Submission
+            </Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {sortedScores.map((userScore, index) => (
+            <Tr key={index} _hover={{ bg: 'yellow.200', transition: 'background-color 0.3s ease-in-out' }}>
+              <Td>
+                {index === 0 ? (
+                  <Box as={FaCrown} color="gold" size="20px" mr={2} />
+                ) : index === 1 ? (
+                  <Box as={FaCrown} color="silver" size="20px" mr={2} />
+                ) : index === 2 ? (
+                  <Box as={FaCrown} size="20px" mr={2} style={{ color: '#cd7f32' }} />
+                ) : (
+                  index + 1
+                )}
+              </Td>
+              <Td>{userScore.name}</Td>
+              <Td textAlign="center">
+                <Badge colorScheme="white" color="black.900">
+                  {userScore.score}
+                </Badge>
+              </Td>
+              <Td style={{ fontSize: '14px' }} textAlign="center">
+                {userScore.timeofsub}
+              </Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
 
       <Flex justifyContent="center" my={4}>
-        <Button colorScheme="red" onClick={logout}>
+        <Button colorScheme="red" onClick={onOpen}>
           Logout
         </Button>
       </Flex>
@@ -127,7 +161,6 @@ const Result = () => {
       </Text>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <img
-
           src="/creator.gif"
           alt="Creator GIF"
           style={{
@@ -150,4 +183,5 @@ const Result = () => {
     </Box>
   );
 };
+
 export default Result;
