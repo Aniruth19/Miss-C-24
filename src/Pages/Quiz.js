@@ -28,6 +28,7 @@ import { useNavigate } from 'react-router-dom';
 import { collection, addDoc } from 'firebase/firestore';
 import questions from '../components/Questions';
 import { database } from '../components/ConfigFirebase';
+
 const Quiz = () => {
   const navigate = useNavigate();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -152,51 +153,47 @@ const Quiz = () => {
           </Box>
 
           <RadioGroup onChange={handleAnswerChange} value={selectedOptions[currentQuestionIndex] || ''}>
-            <Stack spacing={2}>
+            <Stack spacing={5} paddingBottom={3}>
               {questions[currentQuestionIndex].options.map((option, index) => (
-                <Radio key={index} value={option}>
-                  <img
-                    src={option}
-                    alt={`Option ${index + 1}`}
-                    style={{ maxWidth: '100%', height: 'auto', maxHeight: '100px', width: 'auto', objectFit: 'contain' }}
-                  />
+                <Radio key={index} value={option} fontSize="xl">
+                  {option}
                 </Radio>
               ))}
             </Stack>
           </RadioGroup>
           <Stack direction="row" spacing={7} ml={6}>
-          <Button onClick={handlePreviousQuestion} disabled={currentQuestionIndex === 0} mx={2}>
-            Previous Question
-          </Button>
-          <Button
-            onClick={
-              currentQuestionIndex === questions.length - 1
-                ? handleFinishQuiz
-                : handleNextQuestion
-            }
-            disabled={!selectedOptions[currentQuestionIndex]}
-            colorScheme={
-              currentQuestionIndex === questions.length - 1 ? 'green' : 'blue'
-            }
-            mx={7}
-          >
-            {currentQuestionIndex === questions.length - 1
-              ? 'Finish Quiz'
-              : 'Next Question'}
-          </Button>
-          <Button colorScheme="red" onClick={handleLogout} ml={4} mx={10}>
-            Logout
-          </Button>
+            <Button onClick={handlePreviousQuestion} disabled={currentQuestionIndex === 0} mx={2}>
+              Previous Question
+            </Button>
+            <Button
+              onClick={
+                currentQuestionIndex === questions.length - 1
+                  ? handleFinishQuiz
+                  : handleNextQuestion
+              }
+              disabled={!selectedOptions[currentQuestionIndex]}
+              colorScheme={
+                currentQuestionIndex === questions.length - 1 ? 'green' : 'blue'
+              }
+              mx={7}
+            >
+              {currentQuestionIndex === questions.length - 1
+                ? 'Finish Quiz'
+                : 'Next Question'}
+            </Button>
+            <Button colorScheme="red" onClick={handleLogout} ml={4} mx={10}>
+              Logout
+            </Button>
+          </Stack>
         </Stack>
-      </Stack>
-    </Card>
+      </Card>
       <Alert status="success" variant="solid" display={showAlert ? 'flex' : 'none'}>
         <AlertIcon />
         <AlertTitle mr={2}>Quiz Completed!</AlertTitle>
         <AlertDescription>Your score is: {score}</AlertDescription>
       </Alert>
       <Confetti active={confetti} config={confettiConfig} />
-      <Text mt={5} textAlign="center">
+      <Text mt={6} pt={12} textAlign="center">
         Currently logged in as: {user}
       </Text>
 
@@ -211,7 +208,7 @@ const Quiz = () => {
               Logout Confirmation
             </AlertDialogHeader>
             <AlertDialogBody>
-              Are you sure you want to logout? your progress will be lost.
+              Are you sure you want to logout? Your progress will be lost.
             </AlertDialogBody>
             <AlertDialogFooter>
               <Button ref={cancelRef} onClick={() => setLogoutConfirmation(false)}>
