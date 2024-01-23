@@ -120,7 +120,7 @@ const Quiz = () => {
     <Box p={4} overflow="auto">
       <Card borderRadius="lg">
         <Stack spacing={4} p={8} textAlign="center">
-          <Text fontSize="md" color="gray.500" mb={2}>
+          <Text fontSize="md" color="gray.600" mb={2}>
             Question {currentQuestionIndex + 1} of {questions.length}
           </Text>
           <VStack align="center" spacing={4} maxH="600px" overflow="auto">
@@ -141,11 +141,12 @@ const Quiz = () => {
           <Box
             mb={2}
             fontSize="l"
-            color="red"
+            color="red.400"
             cursor="pointer"
             onClick={() => setShowHint(!showHint)}
             transition="color 0.3s"
             _hover={{ color: 'blue.500' }}
+            fontWeight="bold" 
           >
             {showHint ? 'Hide Hint' : 'Show Hint'}
           </Box>
@@ -163,30 +164,39 @@ const Quiz = () => {
               ))}
             </Stack>
           </RadioGroup>
-          <Stack direction="row" spacing={4} ml={6}>
-            <Button onClick={handlePreviousQuestion} disabled={currentQuestionIndex === 0}>
-              Previous Question
-            </Button>
-            <Button
-              onClick={currentQuestionIndex === questions.length - 1 ? handleFinishQuiz : handleNextQuestion}
-              disabled={!selectedOptions[currentQuestionIndex]}
-              colorScheme={currentQuestionIndex === questions.length - 1 ? 'green' : 'gray'}
-            >
-              {currentQuestionIndex === questions.length - 1 ? 'Finish Quiz' : 'Next Question'}
-            </Button>
-            <Button colorScheme="red" onClick={handleLogout} ml={6}>
-              Logout
-            </Button>
-          </Stack>
+          <Stack direction="row" spacing={7} ml={6}>
+          <Button onClick={handlePreviousQuestion} disabled={currentQuestionIndex === 0} mx={2}>
+            Previous Question
+          </Button>
+          <Button
+            onClick={
+              currentQuestionIndex === questions.length - 1
+                ? handleFinishQuiz
+                : handleNextQuestion
+            }
+            disabled={!selectedOptions[currentQuestionIndex]}
+            colorScheme={
+              currentQuestionIndex === questions.length - 1 ? 'green' : 'blue'
+            }
+            mx={7}
+          >
+            {currentQuestionIndex === questions.length - 1
+              ? 'Finish Quiz'
+              : 'Next Question'}
+          </Button>
+          <Button colorScheme="red" onClick={handleLogout} ml={4} mx={10}>
+            Logout
+          </Button>
         </Stack>
-      </Card>
+      </Stack>
+    </Card>
       <Alert status="success" variant="solid" display={showAlert ? 'flex' : 'none'}>
         <AlertIcon />
         <AlertTitle mr={2}>Quiz Completed!</AlertTitle>
         <AlertDescription>Your score is: {score}</AlertDescription>
       </Alert>
       <Confetti active={confetti} config={confettiConfig} />
-      <Text mt={4} textAlign="center">
+      <Text mt={5} textAlign="center">
         Currently logged in as: {user}
       </Text>
 
