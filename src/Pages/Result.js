@@ -69,19 +69,6 @@ const Result = () => {
 
   return (
     <Box p={4} overflowX="auto">
-      <AlertDialog isOpen={isOpen} leastDestructiveRef={undefined} onClose={onClose}>
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Unauthorized Access
-            </AlertDialogHeader>
-            <AlertDialogBody>
-              Please log in and complete the Quiz to access this page.
-            </AlertDialogBody>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
-
       <AlertDialog
         isOpen={isOpen}
         leastDestructiveRef={undefined}
@@ -125,7 +112,7 @@ const Result = () => {
         </Thead>
         <Tbody>
           {sortedScores.map((userScore, index) => (
-            <Tr key={index} _hover={{ bg: 'yellow.200', transition: 'background-color 0.3s ease-in-out' }}>
+            <Tr key={index} _hover={{ bg: 'red.100', transition: 'background-color 0.3s ease-in-out' }}>
               <Td>
                 {index === 0 ? (
                   <Box as={FaCrown} color="gold" size="20px" mr={2} />
@@ -157,7 +144,7 @@ const Result = () => {
         </Button>
       </Flex>
       <Text fontSize="sm" color="red.500" fontStyle="italic" mb={4} textAlign="center">
-        <span style={{ fontStyle: 'normal', color: 'black' }}>Note:</span> Resubmissions will not be taken into account*.
+        <span style={{ fontStyle: 'normal', color: 'black' }}>Note:</span> Resubmissions will not be taken into account*
       </Text>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <img
@@ -175,7 +162,7 @@ const Result = () => {
       <Text fontSize="sm" fontStyle="italic" color="gray.500" textAlign="center" mt={2}>
         A webpage by{' '}
         <ChakraLink href="https://www.instagram.com/aniruth_19/" target="_blank" rel="noopener noreferrer">
-          <span style={{ fontStyle: 'normal', color: '#E53E3E', textDecoration: 'underline', cursor: 'pointer' }}>
+          <span style={{ fontStyle: 'normal', color: '#E53E3E', cursor: 'pointer' }}>
             Aniruth
           </span>
         </ChakraLink>
