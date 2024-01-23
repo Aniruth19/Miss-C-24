@@ -28,11 +28,14 @@ import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs } from 'firebase/firestore';
 import { database } from '../components/ConfigFirebase';
+import { motion } from 'framer-motion';
+
 
 const Result = () => {
   const navigate = useNavigate();
   const [userScores, setUserScores] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [currentUser, setCurrentUser] = useState('');
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((userData) => {
@@ -41,6 +44,8 @@ const Result = () => {
         setTimeout(() => {
           navigate('/');
         }, 400);
+      } else {
+        setCurrentUser(userData.email);
       }
     });
 
@@ -81,7 +86,7 @@ const Result = () => {
               Logout Confirmation
             </AlertDialogHeader>
             <AlertDialogBody>
-              Are you sure you want to logout? Your progress will be lost.
+              Are you sure you want to leave the Leaderboard page?
             </AlertDialogBody>
             <AlertDialogFooter>
               <Button onClick={onClose}>Cancel</Button>
@@ -94,12 +99,24 @@ const Result = () => {
       </AlertDialog>
 
       <Flex alignItems="center" mb={4} justifyContent="center" pt={4} pb={4}>
+      <motion.div
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
         <GiTrophyCup size={32} style={{ marginRight: '8px' }} />
+      </motion.div>
+      <motion.div
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+      >
         <Heading size="lg" fontWeight="bold">
           Leaderboard
         </Heading>
-      </Flex>
-      <Table variant="simple" colorScheme="gray" size="md">
+      </motion.div>
+    </Flex>
+      <Table variant="simple" colorScheme="gray" size="lg">
         <Thead>
           <Tr>
             <Th>Rank</Th>
@@ -112,12 +129,21 @@ const Result = () => {
         </Thead>
         <Tbody>
           {sortedScores.map((userScore, index) => (
-            <Tr key={index} _hover={{ bg: 'red.100', transition: 'background-color 0.3s ease-in-out' }}>
+            <Tr
+            key={index}
+            _hover={{ bg: 'pink.100', transition: 'background-color 0.3s ease-in-out' }}
+            bg={
+              currentUser && currentUser === userScore.name
+                ? 'linear-gradient(to right, rgba(255, 133, 221, 0.2), rgba(247, 109, 87, 0.3), rgba(255, 215, 0, 0.1), rgba(177, 13, 201, 0.2), rgba(160, 32, 240, 0.3), rgba(100, 221, 23, 0.2), rgba(75, 0, 130, 0.3))'
+                : undefined
+            }
+            fontWeight={currentUser && currentUser === userScore.name ? 'bold' : undefined}
+          >
               <Td>
                 {index === 0 ? (
-                  <Box as={FaCrown} color="gold" size="20px" mr={2} />
+                  <Box as={FaCrown} color="yellow" size="28px" mr={2} />
                 ) : index === 1 ? (
-                  <Box as={FaCrown} color="silver" size="20px" mr={2} />
+                  <Box as={FaCrown} color="silver" size="23px" mr={2} />
                 ) : index === 2 ? (
                   <Box as={FaCrown} size="20px" mr={2} style={{ color: '#cd7f32' }} />
                 ) : (
@@ -138,7 +164,7 @@ const Result = () => {
         </Tbody>
       </Table>
 
-      <Flex justifyContent="center" my={4}>
+      <Flex justifyContent="center" my={4} mt={7}>
         <Button colorScheme="red" onClick={onOpen}>
           Logout
         </Button>
