@@ -1,7 +1,5 @@
 import { Stack, Flex, useColorMode } from '@chakra-ui/react';
 import Header from './Header';
-import { Player, Controls } from '@lottiefiles/react-lottie-player';
-
 
 const Layout = ({ children }) => {
   const { colorMode } = useColorMode();
