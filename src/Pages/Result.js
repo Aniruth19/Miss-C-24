@@ -116,6 +116,30 @@ const Result = () => {
         </Heading>
       </motion.div>
     </Flex>
+    <Box
+    maxH="600px"
+    overflowY="auto"
+    sx={{
+      "&::-webkit-scrollbar": {
+        width: "15px",
+        height: "6px",
+      },
+      "&::-webkit-scrollbar-thumb": {
+        background: "gray",
+        borderRadius: "6px",
+      },
+      "&::-webkit-scrollbar-thumb:hover": {
+        background: "#718096",
+      },
+      "&::-webkit-scrollbar-track": {
+        background: "#CBD5E0",
+        borderRadius: "8px",
+      },
+      "&::-webkit-scrollbar-track:hover": {
+        background: "#CBD5E0",
+      },
+    }}
+  > 
       <Table variant="simple" colorScheme="gray" size="lg">
         <Thead>
           <Tr>
@@ -163,6 +187,7 @@ const Result = () => {
           ))}
         </Tbody>
       </Table>
+      </Box>
 
       <Flex justifyContent="center" my={4} mt={7}>
         <Button colorScheme="red" onClick={onOpen}>
