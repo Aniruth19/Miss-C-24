@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Box,
   Button,
@@ -20,6 +20,7 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
+  HStack,
 } from '@chakra-ui/react';
 import Confetti from 'react-dom-confetti';
 import { auth } from '../components/ConfigFirebase';
@@ -39,7 +40,23 @@ const Quiz = () => {
   const [confetti, setConfetti] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [logoutConfirmation, setLogoutConfirmation] = useState(false);
-  const cancelRef = React.useRef();
+  const cancelRef = useRef();
+  const [timer, setTimer] = useState(0); // Timer state
+
+  // Start the timer when the component mounts
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimer((prevTimer) => prevTimer + 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const formatTimer = (time) => {
+    const hours = Math.floor(time / 3600);
+    const minutes = Math.floor((time % 3600) / 60);
+    const seconds = Math.floor(time % 60);
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  };
 
   const handleAnswerChange = (value) => {
     setSelectedOptions((prevSelectedOptions) => ({
@@ -61,27 +78,29 @@ const Quiz = () => {
 
   const handleFinishQuiz = async () => {
     let newScore = 0;
-
+  
     questions.forEach((question, index) => {
       if (selectedOptions[index] === question.correctAnswer) {
         newScore += 1;
       }
     });
-
+  
     setScore(newScore);
     setShowAlert(true);
     setConfetti(true);
-
+  
+    const formattedTimerTime = formatTimer(timer); // Format timer time
     const currentTime = new Date();
-    const timeOfSubmission = currentTime.toLocaleTimeString('en-US', { hour12: true });
-
+    const timeOfSubmission = currentTime.toLocaleTimeString('en-US', { hour12: true }); // Current time in HH:MM:SS format
+  
     const scoresCollection = collection(database, 'userscores');
     await addDoc(scoresCollection, {
       name: user,
       score: newScore,
-      timeofsub: timeOfSubmission,
+      timeofsub: timeOfSubmission, // Store the current time as timeofsub
+      timertime: formattedTimerTime, // Store the formatted timer time as timertime
     });
-
+  
     setTimeout(() => {
       navigate('/Result');
     }, 800);
@@ -117,13 +136,71 @@ const Quiz = () => {
     elementCount: 200,
   };
 
+  const handleJumpToQuestion = (index) => {
+    setCurrentQuestionIndex(index);
+    setShowHint(false);
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  };
+
+  const renderNavigatorButtons = () => {
+    const buttons = [];
+    const startIndex = Math.max(0, currentQuestionIndex - 4);
+    const endIndex = Math.min(currentQuestionIndex + 5, questions.length);
+    for (let i = startIndex; i < endIndex; i++) {
+      buttons.push(
+        <Button
+          key={i}
+          onClick={() => handleJumpToQuestion(i)}
+          colorScheme={currentQuestionIndex === i ? 'blue' : 'gray'}
+          size="sm"
+        >
+          {i + 1}
+        </Button>
+      );
+    }
+    return buttons;
+  };
+
   return (
     <Box p={4} overflow="auto">
       <Card borderRadius="lg">
         <Stack spacing={4} p={8} textAlign="center">
-          <Text fontSize="md" color="gray.600" mb={2}>
+          <Text fontSize="md" color="gray.700" mb={1}>
             Question {currentQuestionIndex + 1} of {questions.length}
           </Text>
+          <Box
+            borderWidth="2px"
+            borderRadius="md"
+            p={1}
+            pb={2}
+            boxShadow="xl"
+            width="17%"
+            mx="auto"
+            bg="blue.500"
+            color="white"
+            textAlign="center"
+            fontWeight="bold"
+            fontSize="l"
+            position="relative"
+            borderColor="gray.300"
+          >
+            <Text
+              style={{
+                transition: 'transform 1s',
+                fontWeight: 'bold',
+                textShadow: '2px 1px rgba(0,0,0,0.2)',
+              }}
+            >
+              {formatTimer(timer)}
+            </Text>
+            <Box
+              position="absolute"
+              top="50%"
+              left="50%"
+              transform="translate(-50%, -50%)"
+            >
+            </Box>
+          </Box>
           <VStack align="center" spacing={4} maxH="600px" overflow="auto">
             <Image
               src={questions[currentQuestionIndex].question}
@@ -147,7 +224,7 @@ const Quiz = () => {
             onClick={() => setShowHint(!showHint)}
             transition="color 0.3s"
             _hover={{ color: 'blue.500' }}
-            fontWeight="bold" 
+            fontWeight="bold"
           >
             {showHint ? 'Hide Hint' : 'Show Hint'}
           </Box>
@@ -185,6 +262,10 @@ const Quiz = () => {
               Logout
             </Button>
           </Stack>
+
+          <HStack mt={4} justifyContent="center">
+            {renderNavigatorButtons()}
+          </HStack>
         </Stack>
       </Card>
       <Alert status="success" variant="solid" display={showAlert ? 'flex' : 'none'}>
@@ -194,7 +275,7 @@ const Quiz = () => {
       </Alert>
       <Confetti active={confetti} config={confettiConfig} />
       <Text mt={6} pt={12} textAlign="center">
-        Currently logged in as: {user}
+        Currently logged in as : {user}
       </Text>
 
       <AlertDialog

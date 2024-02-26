@@ -25,7 +25,7 @@ const Rules = () => {
       <List as="ol" spacing={3}>
         <ListItem>
           <span role="img" aria-label="Pin" style={pinStyle}>📌</span>
-          Avoid switching tabs or refreshing the page.
+          Avoid switching tabs or refreshing the page while attending the contest.
         </ListItem>
         <ListItem>
           <span role="img" aria-label="Pin" style={pinStyle}>📌</span>
@@ -37,7 +37,7 @@ const Rules = () => {
         </ListItem>
         <ListItem>
           <span role="img" aria-label="Pin" style={pinStyle}>📌</span>
-          The event lasts for only 30 minutes, so be quick!
+          The event lasts for only 45 minutes, so be quick!
         </ListItem>
         <ListItem>
           <span role="img" aria-label="Pin" style={pinStyle}>📌</span>
@@ -45,7 +45,7 @@ const Rules = () => {
         </ListItem>
         <ListItem>
           <span role="img" aria-label="Pin" style={pinStyle}>📌</span>
-          The Winners will recieve their rewards within 5 days of the event.
+          The Winners will recieve their rewards in the evening.
         </ListItem>
       </List>
     </Stack>

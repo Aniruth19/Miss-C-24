@@ -28,7 +28,6 @@ const Landing = () => {
       }
     });
 
-    // Scroll to the top when the component is loaded
     window.scrollTo(0, 0);
   }, [navigate]);
 
@@ -56,20 +55,20 @@ const Landing = () => {
           CAN YOU FIND THE
         </Text>
         <Text fontSize="4xl" fontWeight="extrabold" color="red.300" display="inline">
-          {' <MIS_SING C_DE/>'}
+          {' <MI_SING C_DE/>'}
         </Text>
       </Heading>
 
       <div style={{ fontSize: '24px' }}>
         <Typewriter
           options={{
-            strings: ['20 questions', '30 minutes', 'Can you find the missing block?'],
+            strings: ['30 Questions', '45 minutes', 'Can you find the missing piece of code?'],
             autoStart: true,
             loop: true,
           }}
         />
       </div>
-      <Button mt="8" onClick={login}>
+      <Button mt="8" onClick={login} size="lg">
         GET STARTED
       </Button>
     </Box>
