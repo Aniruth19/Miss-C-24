@@ -1,70 +1,93 @@
-# Getting Started with Create React App
+# <M_SSING-C_ODE/>
+_This project is a quiz application built using React, Chakra UI, and Firebase, developed for the Missing Code event at Cryptera 2k24, a technical symposium hosted by [CIT](https://www.cit.edu.in/). It features Google authentication, a real-time leaderboard, and a cool UI. The application was used by over 100 participants simultaneously during the event, delivering a smooth and responsive experience._
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 🌟 Features
+**Google Authentication**: Secure login via Google.
 
-## Available Scripts
+**Landing Page**: Designed with Chakra UI for a modern, responsive interface.
 
-In the project directory, you can run:
+**Quiz with Timer**: Whole quiz is timed, adding a layer of challenge.
 
-### `npm start`
+**Rulebook**: A guide to help users before they start the quiz.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+**Real-Time Leaderboard**: View user rankings in real-time.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+**Responsive Design**: Optimized for both desktop and mobile views.
 
-### `npm test`
+**Page Routing**: Seamless and secure navigation with React Router.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Live Demo 👉 [<M_issing C_ode/>](https://missing-code-4f324.web.app/)
 
-### `npm run build`
+## 🛠 **Tech Stack**
+- Frontend: React, Chakra UI
+- Backend: Firebase (Authentication, Firestore)
+- Deployment: Firebase Hosting
+## 📸 **Screenshots**
+**_LANDING PAGE_**
+![Screenshot 2024-10-19 232608](https://github.com/user-attachments/assets/7353847b-1db4-46f4-8ef8-909f983084a8)
 
-Builds the app for production to the `build` folder.\
+**_GOOGLE AUTHENTICATION_**
+![image](https://github.com/user-attachments/assets/2050f4b6-df12-495f-b67d-552e230e2c11)
+
+**_QUIZ SCREENSHOTS_**
+![Screenshot 2024-10-19 232703](https://github.com/user-attachments/assets/e04091d3-459c-4910-bb50-3dd53115ade1)
+
+**_LEADERBOARD_**
+![Screenshot 2024-10-19 232905](https://github.com/user-attachments/assets/11046849-0709-4424-8b19-508821a12798)
+
+## **🚀 Getting Started**
+To get a local copy of the project up and running, follow these simple steps.
+
+## **Prerequisites**
+Node.js: Install Node.js.
+
+Firebase Account: Set up a Firebase project to use authentication and Firestore.
+
+## **Clone the repository:**
+```
+git clone https://github.com/yourusername/Miss-C-24.git
+cd Miss-C-24
+```
+Install dependencies:
+```
+npm install
+```
+## **Set up Firebase:**
+Feel free to connect with me on [LinkedIn](http://linkedin.com/in/aniruthan-manivannan-a06885270/) or drop me an email at ✉️ m.aniruthan@gmail.com if you need help or have any questions about the Firebase setup.
+
+Start the application(locally)
+```
+npm start
+```
+Open (http://localhost:3000) to view it in your browser.
+The page will reload when you make changes.
+
+## Firebase Setup
+After the firebase setup you can either deploy the application or run it locally as usual.
+```
+npm run build
+```
+Builds the app for production to the build folder.
 It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+npm test
+```
+Launches the test runner in the interactive watch mode.
+See the section about running tests for more information.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+> [!TIP]
+> For more information on **Firebase Deployment** and **Google Authentication**, refer to the following resources:
+> - [Firebase Hosting Quickstart](https://firebase.google.com/docs/hosting/quickstart)
+> - [Google Sign-In with Firebase Authentication](https://firebase.google.com/docs/auth/web/google-signin)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# 🔧 Future Improvements
+- Add multiple quiz categories
 
-### `npm run eject`
+- Enable user-submitted questions
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- Add difficulty levels for quizzes
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- UI Improvements for native mobile view
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+# 🤝 Contributing
+Contributions are welcome! Feel free to fork the repository, create a feature branch, and submit a pull request.
